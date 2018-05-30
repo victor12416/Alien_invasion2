@@ -22,14 +22,6 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
         sys.exit()
 
 
-def fire_bullet(ai_settings, screen, ship, bullets):
-    """Fire a bullet if limit not reached yet."""
-    # Create a new bullet and add it to the bullets group.
-    if len(bullets) < ai_settings.bullets_allowed:
-        new_bullet = Bullet(ai_settings, screen, ship)
-        bullets.add(new_bullet)
-
-
 def check_keyup_events(event, ship):
     """Respond to key releases."""
     if event.key == pygame.K_RIGHT:
@@ -81,6 +73,7 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
         sb.prep_score()
         sb.prep_high_score()
         sb.prep_level()
+        sb.prep_ships()
 
         # Empty the list of aliens and bullets.
         aliens.empty()
@@ -89,6 +82,14 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
         # Create a new fleet and center the ship.
         create_fleet(ai_settings, screen, ship, aliens)
         ship.center_ship()
+
+
+def fire_bullet(ai_settings, screen, ship, bullets):
+    """Fire a bullet if limit not reached yet."""
+    # Create a new bullet and add it to the bullets group.
+    if len(bullets) < ai_settings.bullets_allowed:
+        new_bullet = Bullet(ai_settings, screen, ship)
+        bullets.add(new_bullet)
 
 
 def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets,
@@ -124,10 +125,6 @@ def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
 
-    if len(aliens) == 0:
-        # Destroy existing bullets and create new fleet.
-        bullets.empty()
-        create_fleet(ai_settings, screen, ship, aliens)
 
     check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship,
                                   aliens, bullets)
