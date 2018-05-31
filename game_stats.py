@@ -8,6 +8,7 @@ class GameStats():
 
         # Start Alien Invasion in a active state.
         self.game_active = False
+        self.pause_game = True
 
         # High score should never be reset.
         self.high_score = 0

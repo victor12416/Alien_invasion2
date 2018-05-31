@@ -2,6 +2,7 @@ import sys
 from time import sleep
 
 import pygame
+import time
 
 from alien import Alien
 from bullet import Bullet
@@ -17,9 +18,13 @@ def check_keydown_events(event, ai_settings, screen, ship, bullets):
 
     elif event.key == pygame.K_SPACE:
         fire_bullet(ai_settings, screen, ship, bullets)
+        time.sleep(0)
 
     elif event.key == pygame.K_q:
         sys.exit()
+
+    #elif event.key == pygame.K_p:
+       # time.sleep(60)
 
 
 def check_keyup_events(event, ship):
@@ -29,7 +34,6 @@ def check_keyup_events(event, ship):
 
     elif event.key == pygame.K_LEFT:
         ship.moving_left = False
-
 
 def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens,
                  bullets):
@@ -52,6 +56,13 @@ def check_events(ai_settings, screen, stats, sb, play_button, ship, aliens,
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_play_button(ai_settings, screen, stats, sb, play_button,
                               ship, aliens, bullets, mouse_x, mouse_y)
+
+
+def check_paause_button(ai_settings, screen, stats, sb, pause_game, ship, aliens, bullets, event):
+    # The puase message pops up when p is pressed and pauses the game
+    if event.key == pygame.K_p:
+        stats.pause_game = False
+        stats.game_active = False
 
 
 def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
@@ -93,7 +104,7 @@ def fire_bullet(ai_settings, screen, ship, bullets):
 
 
 def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets,
-                  play_button):
+                  play_button, pause_button):
     """Update images on the screen and flip to the new screen."""
     # Redraw the screen during each pass through the loop.
     screen.fill(ai_settings.bg_color)
@@ -112,6 +123,10 @@ def update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets,
     if not stats.game_active:
         play_button.draw_button()
 
+    # Draw the pause button if p is activated
+    if not stats.pause_game:
+        pause_button.draw_button()
+
     # Make the most recently drawn screen visible.
     pygame.display.flip()
 
@@ -124,7 +139,6 @@ def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets):
     for bullet in bullets.copy():
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
-
 
     check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship,
                                   aliens, bullets)
@@ -268,3 +282,4 @@ def check_high_score(stats, sb):
     if stats.score > stats.high_score:
         stats.high_score = stats.score
         sb.prep_high_score()
+

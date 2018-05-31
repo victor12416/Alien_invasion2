@@ -5,6 +5,7 @@ from settings import Settings
 from game_stats import GameStats
 from scoreboard import Scoreboard
 from button import Button
+from button import Button2
 from ship import Ship
 
 import game_functions as gf
@@ -20,6 +21,9 @@ def run_game():
 
     # Make the Play button.
     play_button = Button(ai_settings, screen, "Play NOW")
+
+    # Make the pause button
+    pause_button = Button2(ai_settings, screen, "Paused")
 
     # Create an unstance to store game statistics and create a scoreboard.
     stats = GameStats(ai_settings)
@@ -44,7 +48,7 @@ def run_game():
             gf.update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets)
             gf.update_aliens(ai_settings, screen, stats, sb, ship, aliens, bullets)
 
-        gf.update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button)
+        gf.update_screen(ai_settings, screen, stats, sb, ship, aliens, bullets, play_button, pause_button)
 
 
 run_game()
